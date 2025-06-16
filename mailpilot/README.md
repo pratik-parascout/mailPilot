@@ -64,21 +64,71 @@
 ## 📁 Project Structure
 
 ```
-
 mailpilot/
-├── public/
 ├── src/
-│   ├── config/         # DB & express config
-│   ├── controllers/    # Route logic
-│   ├── models/         # Mongoose models
-│   ├── routes/         # App routes
-│   ├── services/       # Mail logic & user logic
-│   ├── utils/          # Crypto, CSV parser
-│   ├── views/          # EJS templates (Tailwind-based)
-├── .env
-├── package.json
-└── README.md
-
+│   ├── config/                # Database configuration
+│   │   └── db.js              # MongoDB connection setup
+│   │
+│   ├── controllers/           # Route logic
+│   │   ├── authController.js  # Authentication logic
+│   │   ├── campaignController.js
+│   │   ├── contactController.js
+│   │   ├── smtpController.js
+│   │   ├── templateController.js
+│   │   └── viewController.js  # Render views
+│   │
+│   ├── middleware/            # Express middleware
+│   │   ├── authMiddleware.js  # JWT verification
+│   │   └── uploadCSV.js       # Multer config for CSV uploads
+│   │
+│   ├── models/                # Mongoose schemas
+│   │   ├── Campaign.js
+│   │   ├── Contact.js
+│   │   ├── smtpConfig.js
+│   │   ├── Template.js
+│   │   └── User.js
+│   │
+│   ├── public/                # Static assets
+│   │
+│   ├── routes/                # Express routes
+│   │   ├── authRoutes.js
+│   │   ├── campaignRoutes.js
+│   │   ├── contactRoutes.js
+│   │   ├── smtpRoutes.js
+│   │   ├── templateRoutes.js
+│   │   └── viewRoutes.js
+│   │
+│   ├── services/              # Business logic
+│   │   └── mailService.js     # Email sending functionality
+│   │
+│   ├── utils/                 # Helper functions
+│   │   └── crypto.js          # Encryption for SMTP credentials
+│   │
+│   ├── views/                 # EJS templates
+│   │   ├── campaigns/
+│   │   │   └── new.ejs
+│   │   ├── layouts/
+│   │   │   ├── footer.ejs
+│   │   │   └── header.ejs
+│   │   ├── templates/
+│   │   │   ├── builder.ejs
+│   │   │   ├── edit.ejs
+│   │   │   └── new.ejs
+│   │   ├── campaigns.ejs
+│   │   ├── contacts.ejs
+│   │   ├── dashboard.ejs
+│   │   ├── login.ejs
+│   │   ├── register.ejs
+│   │   ├── smtp-settings.ejs
+│   │   ├── templates.ejs
+│   │   └── upload.ejs
+│   │
+│   └── index.js               # Application entry point
+│
+├── uploads/                   # Uploaded CSV files
+├── .env                       # Environment variables
+├── package.json               # Dependencies and scripts
+└── README.md                  # Project documentation
 ```
 
 ---
