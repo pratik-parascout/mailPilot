@@ -54,7 +54,10 @@ exports.getCampaigns = async (req, res) => {
 };
 
 exports.getNewForm = (req, res) => {
-  res.render('campaigns/new');
+  res.render('campaigns/new', {
+    template: null,
+    error_msg: undefined,
+  });
 };
 
 exports.postCreateCampaign = async (req, res) => {
