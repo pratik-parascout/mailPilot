@@ -1,0 +1,134 @@
+<%- include('layouts/header') %>
+
+<div class="p-8 max-w-xl mx-auto">
+  <h1 class="text-2xl font-bold mb-4 text-blue-300">SMTP Settings</h1>
+  <% if (success_msg && success_msg.length) { %>
+  <div class="mb-4 text-green-400 text-center"><%= success_msg %></div>
+  <% } %> <% if (error_msg && error_msg.length) { %>
+  <div class="mb-4 text-red-400 text-center"><%= error_msg %></div>
+  <% } %>
+  <form action="/smtp-settings" method="POST" class="space-y-4" id="smtpForm">
+    <div>
+      <label class="block mb-1 font-semibold">SMTP Provider</label>
+      <div class="flex items-center space-x-4">
+        <label>
+          <input type="radio" name="provider" value="default" <%= !config ||
+          !config.provider || config.provider === 'default' ? 'checked' : '' %>
+          /> Default (Gmail)
+        </label>
+        <label>
+          <input type="radio" name="provider" value="custom" <%= config &&
+          config.provider === 'custom' ? 'checked' : '' %> /> Custom SMTP
+        </label>
+      </div>
+    </div>
+    <div
+      id="customSmtpFields"
+      style="<%= !config || !config.provider || config.provider === 'default' ? 'display:none;' : '' %>"
+    >
+      <div>
+        <label class="block mb-1" for="host">SMTP Host</label>
+        <input type="text" name="host" id="host" <%= config && config.provider
+        === 'custom' ? 'required' : '' %> class="w-full px-3 py-2 rounded
+        bg-gray-700 text-gray-100 border border-gray-600" value="<%= config &&
+        config.provider === 'custom' ? config.host : '' %>" />
+      </div>
+      <div>
+        <label class="block mb-1" for="port">Port</label>
+        <input type="number" name="port" id="port" <%= config && config.provider
+        === 'custom' ? 'required' : '' %> class="w-full px-3 py-2 rounded
+        bg-gray-700 text-gray-100 border border-gray-600" value="<%= config &&
+        config.provider === 'custom' ? config.port : '' %>" />
+      </div>
+      <div>
+        <label class="block mb-1" for="email">SMTP Email</label>
+        <input type="email" name="email" id="email" <%= config &&
+        config.provider === 'custom' ? 'required' : '' %> class="w-full px-3
+        py-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+        value="<%= config && config.provider === 'custom' ? config.email : ''
+        %>" />
+      </div>
+      <div>
+        <label class="block mb-1" for="password">Password</label>
+        <input type="password" name="password" id="password" <%= config &&
+        config.provider === 'custom' ? 'required' : '' %> class="w-full px-3
+        py-2 rounded bg-gray-700 text-gray-100 border border-gray-600" value=""
+        />
+      </div>
+      <div class="flex items-center">
+        <input type="checkbox" name="tls" id="tls" class="mr-2" <%= config &&
+        config.provider === 'custom' && config.tls ? 'checked' : '' %> />
+        <label for="tls">Use TLS/SSL</label>
+      </div>
+    </div>
+    <button
+      type="submit"
+      class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+    >
+      Save Settings
+    </button>
+  </form>
+  <div class="mt-6">
+    <details class="bg-gray-800 rounded p-4">
+      <summary class="cursor-pointer text-blue-400 font-semibold">
+        ❓ Need help configuring SMTP?
+      </summary>
+      <div class="mt-2 text-sm text-gray-200 space-y-2">
+        <div>
+          <b>Gmail:</b><br />
+          Host: <code>smtp.gmail.com</code><br />
+          Port: <code>465</code> (SSL) or <code>587</code> (TLS)<br />
+          TLS: checked<br />
+          <span class="text-yellow-400"
+            >Note: Enable "App Passwords" in your Google Account.</span
+          >
+        </div>
+        <div>
+          <b>Outlook:</b><br />
+          Host: <code>smtp.office365.com</code><br />
+          Port: <code>587</code><br />
+          TLS: checked
+        </div>
+        <div>
+          <b>Zoho:</b><br />
+          Host: <code>smtp.zoho.com</code><br />
+          Port: <code>465</code> (SSL) or <code>587</code> (TLS)<br />
+          TLS: checked
+        </div>
+        <div>
+          <b>SendGrid:</b><br />
+          Host: <code>smtp.sendgrid.net</code><br />
+          Port: <code>465</code> or <code>587</code><br />
+          TLS: checked<br />
+          Username: <code>apikey</code><br />
+          Password: <code>&lt;your SendGrid API key&gt;</code>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+<script>
+  // Show/hide custom SMTP fields based on provider selection
+  document.addEventListener('DOMContentLoaded', function () {
+    const providerRadios = document.querySelectorAll('input[name="provider"]');
+    const customFields = document.getElementById('customSmtpFields');
+    providerRadios.forEach((radio) => {
+      radio.addEventListener('change', function () {
+        if (this.value === 'custom') {
+          customFields.style.display = '';
+          // Set required attributes
+          customFields.querySelectorAll('input').forEach((input) => {
+            if (input.name !== 'tls') input.required = true;
+          });
+        } else {
+          customFields.style.display = 'none';
+          // Remove required attributes
+          customFields.querySelectorAll('input').forEach((input) => {
+            input.required = false;
+          });
+        }
+      });
+    });
+  });
+</script>
+<%- include('layouts/footer') %>

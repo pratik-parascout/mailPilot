@@ -1,0 +1,65 @@
+<%- include('../layouts/header') %>
+
+<div class="p-8 max-w-4xl mx-auto">
+  <h1 class="text-2xl font-bold mb-6 text-blue-300">
+    Drag & Drop Email Builder
+  </h1>
+  <form id="builderForm" action="/templates/builder/save" method="POST">
+    <div class="mb-4">
+      <label class="block mb-1" for="name">Template Name</label>
+      <input
+        type="text"
+        name="name"
+        id="name"
+        required
+        class="w-full px-3 py-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+      />
+    </div>
+    <div class="mb-4">
+      <label class="block mb-1" for="subject">Subject</label>
+      <input
+        type="text"
+        name="subject"
+        id="subject"
+        required
+        class="w-full px-3 py-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+      />
+    </div>
+    <input type="hidden" name="html" id="htmlInput" />
+    <div
+      id="editor"
+      style="height: 500px; background: #222; border-radius: 8px"
+    ></div>
+    <button
+      type="submit"
+      class="mt-6 w-full py-2 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold"
+    >
+      Save Template
+    </button>
+  </form>
+</div>
+<script src="https://editor.unlayer.com/embed.js"></script>
+<script>
+  var unlayerEditor = null;
+  document.addEventListener('DOMContentLoaded', function () {
+    unlayerEditor = unlayer.createEditor({
+      id: 'editor',
+      displayMode: 'email',
+      projectId: 1234, // optional, for Unlayer analytics
+      appearance: {
+        theme: 'dark',
+      },
+    });
+
+    document
+      .getElementById('builderForm')
+      .addEventListener('submit', function (e) {
+        e.preventDefault();
+        unlayerEditor.exportHtml(function (data) {
+          document.getElementById('htmlInput').value = data.html;
+          e.target.submit();
+        });
+      });
+  });
+</script>
+<%- include('../layouts/footer') %>

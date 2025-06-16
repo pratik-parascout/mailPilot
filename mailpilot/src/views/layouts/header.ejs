@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MailPilot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-900 text-gray-100">
+    <nav class="bg-gray-800 shadow-md p-4">
+      <div class="max-w-6xl mx-auto flex justify-between items-center">
+        <h1 class="text-xl font-bold text-blue-400">MailPilot</h1>
+        <ul class="flex space-x-6">
+          <li>
+            <a href="/dashboard" class="hover:text-blue-400">Dashboard</a>
+          </li>
+          <li>
+            <a href="/contacts" class="hover:text-blue-400">Contacts</a>
+          </li>
+          <li>
+            <a href="/campaigns" class="hover:text-blue-400">Campaigns</a>
+          </li>
+          <li>
+            <a href="/templates" class="hover:text-blue-400">Templates</a>
+          </li>
+          <li>
+            <form action="/auth/logout" method="POST">
+              <button type="submit" class="text-red-400 hover:underline">
+                Logout
+              </button>
+            </form>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="max-w-6xl mx-auto mt-8"></div>
+  </body>
+</html>

@@ -1,0 +1,194 @@
+<%- include('layouts/header') %>
+
+<div class="p-8">
+  <h1 class="text-2xl font-bold mb-4 text-blue-300">Contacts</h1>
+
+  <!-- Manual Add Contact Form -->
+  <form
+    action="/api/contacts"
+    method="POST"
+    class="mb-6 flex flex-col md:flex-row md:items-end md:space-x-4 space-y-2 md:space-y-0"
+  >
+    <div>
+      <label for="name" class="block mb-1">Name</label>
+      <input
+        type="text"
+        name="name"
+        id="name"
+        required
+        class="border border-gray-700 bg-gray-800 text-gray-100 p-2 rounded w-full"
+      />
+    </div>
+    <div>
+      <label for="email" class="block mb-1">Email</label>
+      <input
+        type="email"
+        name="email"
+        id="email"
+        required
+        class="border border-gray-700 bg-gray-800 text-gray-100 p-2 rounded w-full"
+      />
+    </div>
+    <div>
+      <label for="tags" class="block mb-1">Tags (comma separated)</label>
+      <input
+        type="text"
+        name="tags"
+        id="tags"
+        placeholder="e.g. friend,work"
+        class="border border-gray-700 bg-gray-800 text-gray-100 p-2 rounded w-full"
+      />
+    </div>
+    <button
+      type="submit"
+      class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mt-2 md:mt-0"
+    >
+      Add Contact
+    </button>
+  </form>
+
+  <!-- CSV Upload Form -->
+  <form
+    action="/api/contacts/upload"
+    method="POST"
+    enctype="multipart/form-data"
+    class="mb-6 flex items-center space-x-4"
+  >
+    <input
+      type="file"
+      name="file"
+      accept=".csv"
+      class="border border-gray-700 bg-gray-800 text-gray-100 p-2 rounded"
+      required
+    />
+    <button
+      type="submit"
+      class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+    >
+      Upload CSV
+    </button>
+  </form>
+  <div class="overflow-x-auto rounded-lg shadow">
+    <table class="min-w-full border border-gray-700 bg-gray-800 text-gray-100">
+      <thead>
+        <tr class="bg-gray-900">
+          <th class="p-3 text-left align-middle">Name</th>
+          <th class="p-3 text-left align-middle">Email</th>
+          <th class="p-3 text-left align-middle">Tags</th>
+          <th class="p-3 text-left align-middle">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% contacts.forEach(function(c, idx) { %>
+        <tr class="border-t border-gray-700 align-middle" id="row-<%= c._id %>">
+          <td class="p-3 align-middle" id="name-<%= c._id %>"><%= c.name %></td>
+          <td class="p-3 align-middle" id="email-<%= c._id %>">
+            <%= c.email %>
+          </td>
+          <td class="p-3 align-middle" id="tags-<%= c._id %>">
+            <%= c.tags ? c.tags.join(', ') : '' %>
+          </td>
+          <td class="p-3 align-middle">
+            <button
+              class="bg-yellow-600 text-white px-3 py-1 rounded hover:bg-yellow-700 text-xs"
+              onclick="showEditForm('<%= c._id %>','<%= c.name.replace(/'/g, '\\&#39;') %>','<%= c.email %>','<%= c.tags ? c.tags.join(', ') : '' %>')"
+            >
+              Edit
+            </button>
+          </td>
+        </tr>
+        <!-- Edit form row, hidden by default -->
+        <tr id="edit-row-<%= c._id %>" class="hidden">
+          <td colspan="4" class="p-3 bg-gray-900">
+            <form
+              class="flex flex-col md:flex-row md:items-end md:space-x-4 space-y-2 md:space-y-0"
+              onsubmit="return submitEditForm(event, '<%= c._id %>')"
+            >
+              <input
+                type="text"
+                name="name"
+                id="edit-name-<%= c._id %>"
+                required
+                class="border border-gray-700 bg-gray-800 text-gray-100 p-2 rounded w-full"
+                value="<%= c.name %>"
+              />
+              <input
+                type="email"
+                name="email"
+                id="edit-email-<%= c._id %>"
+                required
+                class="border border-gray-700 bg-gray-800 text-gray-100 p-2 rounded w-full"
+                value="<%= c.email %>"
+              />
+              <input
+                type="text"
+                name="tags"
+                id="edit-tags-<%= c._id %>"
+                placeholder="e.g. friend,work"
+                class="border border-gray-700 bg-gray-800 text-gray-100 p-2 rounded w-full"
+                value="<%= c.tags ? c.tags.join(', ') : '' %>"
+              />
+              <button
+                type="submit"
+                class="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 text-xs"
+              >
+                Save
+              </button>
+              <button
+                type="button"
+                class="bg-gray-600 text-white px-3 py-2 rounded hover:bg-gray-700 text-xs"
+                onclick="hideEditForm('<%= c._id %>')"
+              >
+                Cancel
+              </button>
+            </form>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Add axios CDN before your script -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+  function showEditForm(id, name, email, tags) {
+    document.getElementById('row-' + id).style.display = 'none';
+    document.getElementById('edit-row-' + id).classList.remove('hidden');
+    document.getElementById('edit-name-' + id).value = name;
+    document.getElementById('edit-email-' + id).value = email;
+    document.getElementById('edit-tags-' + id).value = tags;
+  }
+  function hideEditForm(id) {
+    document.getElementById('row-' + id).style.display = '';
+    document.getElementById('edit-row-' + id).classList.add('hidden');
+  }
+  async function submitEditForm(event, id) {
+    event.preventDefault();
+    const name = document.getElementById('edit-name-' + id).value;
+    const email = document.getElementById('edit-email-' + id).value;
+    const tags = document.getElementById('edit-tags-' + id).value;
+    try {
+      const res = await axios.put('/api/contacts/' + id, { name, email, tags });
+      if (res.status === 200) {
+        // Update the row in place
+        document.getElementById('name-' + id).textContent = name;
+        document.getElementById('email-' + id).textContent = email;
+        document.getElementById('tags-' + id).textContent = tags;
+        hideEditForm(id);
+      } else {
+        alert('Failed to update contact');
+      }
+    } catch (err) {
+      alert('Failed to update contact');
+    }
+    return false;
+  }
+</script>
+
+<%- include('layouts/footer') %>
+</script>
+
+<%- include('layouts/footer') %>

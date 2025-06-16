@@ -1,0 +1,71 @@
+<%- include('layouts/header') %>
+
+<div class="p-8">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold text-blue-300">Templates</h1>
+    <div>
+      <a
+        href="/templates/new"
+        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
+      >
+        + New Template
+      </a>
+      <a
+        href="/templates/builder"
+        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+      >
+        Drag & Drop Builder
+      </a>
+    </div>
+  </div>
+  <% if (success_msg) { %>
+  <div class="mb-4 text-green-400 text-center"><%= success_msg %></div>
+  <% } %> <% if (error_msg) { %>
+  <div class="mb-4 text-red-400 text-center"><%= error_msg %></div>
+  <% } %>
+  <div class="overflow-x-auto rounded-lg shadow">
+    <table class="min-w-full border border-gray-700 bg-gray-800 text-gray-100">
+      <thead>
+        <tr class="bg-gray-900">
+          <th class="p-3 text-left align-middle">Name</th>
+          <th class="p-3 text-left align-middle">Subject</th>
+          <th class="p-3 text-left align-middle">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% templates.forEach(t => { %>
+        <tr class="border-t border-gray-700 align-middle">
+          <td class="p-3 align-middle"><%= t.name %></td>
+          <td class="p-3 align-middle"><%= t.subject %></td>
+          <td class="p-3 align-middle space-x-2">
+            <a
+              href="/templates/<%= t._id %>/edit"
+              class="bg-yellow-600 text-white px-3 py-1 rounded hover:bg-yellow-700 text-xs"
+              >Edit</a
+            >
+            <form
+              action="/templates/<%= t._id %>/delete"
+              method="POST"
+              style="display: inline"
+            >
+              <button
+                type="submit"
+                class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-xs"
+              >
+                Delete
+              </button>
+            </form>
+            <a
+              href="/templates/<%= t._id %>/use"
+              class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-xs"
+              >Use this template</a
+            >
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include('layouts/footer') %>

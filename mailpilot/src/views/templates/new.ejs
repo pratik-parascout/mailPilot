@@ -1,0 +1,45 @@
+<%- include('../layouts/header') %>
+
+<div class="p-8 max-w-2xl mx-auto">
+  <h1 class="text-2xl font-bold mb-6 text-blue-300">New Template</h1>
+  <form action="/templates/new" method="POST" class="space-y-4">
+    <div>
+      <label class="block mb-1" for="name">Template Name</label>
+      <input
+        type="text"
+        name="name"
+        id="name"
+        required
+        class="w-full px-3 py-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+      />
+    </div>
+    <div>
+      <label class="block mb-1" for="subject">Subject</label>
+      <input
+        type="text"
+        name="subject"
+        id="subject"
+        required
+        class="w-full px-3 py-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+      />
+    </div>
+    <div>
+      <label class="block mb-1" for="body">Body (HTML allowed)</label>
+      <textarea
+        name="body"
+        id="body"
+        rows="6"
+        required
+        class="w-full px-3 py-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+      ></textarea>
+    </div>
+    <button
+      type="submit"
+      class="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold"
+    >
+      Save Template
+    </button>
+  </form>
+</div>
+
+<%- include('../layouts/footer') %>
