@@ -208,9 +208,10 @@ The app will be available at: `http://localhost:3000`
 
 ---
 
-## 📹 Demo Video (Optional)
+## 🎥 Demo Video
 
-> Record a 2–3 minute walkthrough of the app using Loom or OBS and add the link here to showcase your capstone.
+Watch the demo here:  
+🔗 [Click to view MailPilot demo video](https://drive.google.com/file/d/1QsX9GJ45P3UKlUuXa9o8dOEtYRYz2S--/view?usp=sharing)
 
 ---
 
